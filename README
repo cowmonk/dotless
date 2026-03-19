@@ -1,0 +1,27 @@
+dotless
+-------
+
+Automated "dotfiles" setup for all my systems
+
+Rationale
+---------
+
+For the longest time, I've been pulling each individual subsequent suckless utility for a semi-complete system on a multitude of
+linux distros, most predominantly LFS now.
+
+Problem is that, running on a pure tty is tedious work, however since all my systems generally already have some basic
+utilities before I get a GUI, it makes sense for me to create a POSIX makefile system to build all of it.
+
+Building
+--------
+
+
+Patches
+-------
+
+Sending patches is trivial, the main site of development is on the [stagit repo](https://git.based.pt/dotless.git).
+This means that all patches aren't sent via PRs on any of the mirrors.
+
+Run a quick `git format-patch HEAD~1` and send to *cowmonk@based.pt* with the subject head of `[PATCH] dotless]`.
+Consider reading the manpages of `git-send-email` if you are interested in moving towards email for development.
+
