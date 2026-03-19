@@ -66,25 +66,25 @@ $(EXTDIR)/%: $(SRCDIR)/%.tar.gz
 	@[ -d "$(EXTDIR)" ] || mkdir -p "$(EXTDIR)"
 	@if [ ! -f "$(EXTDIR)/$(NAME_dwm)" ]; then \
 		echo "extracting $(NAME_dwm).tar.gz..."; \
-		tar -xzf "$(SRCDIR)/$(NAME_dwm).tar.gz" -C      "$(EXTDIR)" && \
+		tar -xzf "$(SRCDIR)/$(NAME_dwm).tar.gz" -C      "$(EXTDIR)" \
 	else \
 		printf "> \033[92malready extracted $(NAME_dwm).tar.gz...\n\033[0m"; \
 	fi
 	@if [ ! -f "$(SRCDIR)/$(NAME_st)" ]; then \
 		echo "extracting $(NAME_st).tar.gz..."; \
-		tar -xzf "$(SRCDIR)/$(NAME_st).tar.gz" -C       "$(EXTDIR)" && \
+		tar -xzf "$(SRCDIR)/$(NAME_st).tar.gz" -C       "$(EXTDIR)" \
 	else \
 		printf "> \033[92malready extracted $(NAME_st).tar.gz...\n\033[0m"; \
 	fi
 	@if [ ! -f "$(SRCDIR)/$(NAME_dmenu)" ]; then \
 		echo "extracting $(NAME_dmenu).tar.gz..."; \
-		tar -xzf "$(SRCDIR)/$(NAME_dmenu).tar.gz" -C    "$(EXTDIR)" && \
+		tar -xzf "$(SRCDIR)/$(NAME_dmenu).tar.gz" -C    "$(EXTDIR)" \
 	else \
 		printf "> \033[92malready extracted $(NAME_dmenu).tar.gz...\n\033[0m"; \
 	fi
 	@if [ ! -f "$(SRCDIR)/$(NAME_slstatus)" ]; then \
 		echo "extracting $(NAME_slstatus).tar.gz..."; \
-		tar -xzf "$(SRCDIR)/$(NAME_slstatus).tar.gz" -C "$(EXTDIR)" && \
+		tar -xzf "$(SRCDIR)/$(NAME_slstatus).tar.gz" -C "$(EXTDIR)" \
 	else \
 		printf "> \033[92malready extracted $(NAME_slstatus).tar.gz...\n\033[0m"; \
 	fi
