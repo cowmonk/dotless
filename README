@@ -11,10 +11,12 @@ linux distros, most predominantly LFS now.
 
 Problem is that, running on a pure tty is tedious work, however since all my systems generally already have some basic
 utilities before I get a GUI, it makes sense for me to create a POSIX makefile system to build all of it.
+However, this is intended to be easily "customizable", so users should be able to easily configure anything.
 
 Building
 --------
 
+There are several options, however the default is very serviceable for any Linux distro.
 
 Patches
 -------
