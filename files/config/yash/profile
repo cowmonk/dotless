@@ -1,0 +1,228 @@
+#
+# yash profile
+#
+# my "custom" funni configuration
+# tbh it's just cherry picked configuration from the default config
+#
+
+set --brace-expand
+set --extended-glob
+set --no-unset
+
+if command --identify --builtin-command history >/dev/null; then
+
+        # don't save commands starting with a space in history
+        set --hist-space
+
+        # prevent clearing history by accident
+        history()
+        if [ -t 0 ] && (
+                for arg do
+                        case "${arg}" in
+                                (-[drsw]?* | --*=*) ;;
+                                (-*c*) exit;;
+                        esac
+                done
+                false
+        ) then
+                printf 'history: seems you are trying to clear the whole history.\n' >&2
+                printf 'are you sure? (yes/no) ' >&2
+                case "$(head -n 1)" in
+                        ([Yy]*) command history "$@";;
+                        (*)     printf 'history: cancelled.\n' >&2;;
+                esac
+        else
+                command history "$@"
+        fi
+
+fi
+
+# if yash is built with line-editing enabled...
+if command --identify --builtin-command bindkey >/dev/null; then
+        # print job status update ASAP, but only while line-editing
+        set --notify-le
+
+        # some terminfo data are broken; meta flags have to be ignored for UTF-8
+        set --le-no-conv-meta
+
+        # enable command line prediction
+        set --le-predict
+
+        set -o vi
+fi
+
+case $- in (*m*)
+        trap - TSTP TTIN TTOU
+esac
+
+# variables needed for command history
+
+if ! [ "${HISTFILE-}" ]; then
+        HISTFILE=${XDG_STATE_HOME:-~/.local/state}/yash/history
+
+        # handle old default history path
+        if [ -f ~/.yash_history ]; then
+                printf 'Note: The default history file location has been changed to "%s".\n' "$HISTFILE" >&2
+                HISTFILE=~/.yash_history
+                printf 'Please consider moving the existing file from the current location "%s".\n' "$HISTFILE" >&2
+        fi
+fi
+
+# create HISTFILE parent directory if missing
+! [ -d "${HISTFILE%/*}" ] && mkdir -p "${HISTFILE%/*}"
+
+HISTSIZE=5000
+
+# HISTRMDUP makes prediction less accurate
+# HISTRMDUP=500
+
+# default mail check interval is too long
+MAILCHECK=0
+
+# emulate bash's $SHLVL
+if [ "${_old_shlvl+set}" != set ]; then
+        _old_shlvl=${SHLVL-}
+fi
+SHLVL=$((_old_shlvl+1)) 2>/dev/null || SHLVL=1
+export SHLVL
+
+# initialize event handlers
+COMMAND_NOT_FOUND_HANDLER=()
+PROMPT_COMMAND=()
+POST_PROMPT_COMMAND=()
+YASH_AFTER_CD=()
+
+if [[ "$(id -u)" -eq 0 ]]; then
+	export YASH_PS1='\[\fro.\]${USER} [\[\fD.\] ${PWD/#"$HOME"/\~} \[\fro.\]]$ \[\fD.\]'  
+else
+	export YASH_PS1='\[\fgo.\]${USER} [\[\fD.\] ${PWD/#"$HOME"/\~} \[\fgo.\]]$ \[\fD.\]'  
+fi
+export YASH_PS1S="\fD."
+
+# PS1='${LOGNAME}@${HOSTNAME%%.*} '$PS1
+
+case "$TERM" in
+        (xterm|xterm[+-]*|gnome|gnome[+-]*|putty|putty[+-]*|cygwin)
+                _tsl='\033];' _fsl='\a' ;;
+        (*)
+                _tsl=$( (tput tsl 0; echo) 2>/dev/null |
+                sed -e 's;\\;\\\\;g' -e 's;;\\033;g' -e 's;;\\a;g' -e 's;%;%%;g')
+                _fsl=$( (tput fsl  ; echo) 2>/dev/null |
+                sed -e 's;\\;\\\\;g' -e 's;;\\033;g' -e 's;;\\a;g' -e 's;%;%%;g') ;;
+esac
+# if terminal window title can be changed...
+if [ "$_tsl" ] && [ "$_fsl" ]; then
+        # set terminal window title on each prompt
+        _set_term_title()
+        if [ -t 2 ]; then
+                printf "$_tsl"'%s@%s:%s'"$_fsl" "${LOGNAME}" "${HOSTNAME%%.*}" \
+                        "${${PWD:/$HOME/\~}/#$HOME\//\~\/}" >&2
+        fi
+        PROMPT_COMMAND=("$PROMPT_COMMAND" '_set_term_title')
+
+        # reset window title when changing host or user
+        ssh() {
+                if [ -t 2 ]; then printf "$_tsl"'ssh %s'"$_fsl" "$*" >&2; fi
+                command ssh "$@"
+        }
+        su() {
+                if [ -t 2 ]; then printf "$_tsl"'su %s'"$_fsl" "$*" >&2; fi
+                command su "$@"
+        }
+        sudo() {
+                if [ -t 2 ]; then printf "$_tsl"'sudo %s'"$_fsl" "$*" >&2; fi
+                command sudo "$@"
+        }
+        doas() {
+                if [ -t 2 ]; then printf "$_tsl"'doas %s'"$_fsl" "$*" >&2; fi
+                command doas "$@"
+        }
+fi
+
+# define function that updates $_vcs_info and $_vcs_root
+_update_vcs_info() {
+        typeset type branch
+        {
+                read --raw-mode type
+                read --raw-mode _vcs_root
+                read --raw-mode branch
+        } <(
+                exec 2>/dev/null
+                typeset COMMAND_NOT_FOUND_HANDLER=
+                while true; do
+                        if [ -e .git ] || [ . -ef "${GIT_WORK_TREE-}" ]; then
+                                printf 'git\n%s\n' "${GIT_WORK_TREE:-$PWD}"
+                                git branch --no-color | sed -n '/^\*/s/^..//p'
+                                exit
+                        elif [ -d .hg ]; then
+                                printf 'hg\n%s\n' "$PWD"
+                                exec cat .hg/branch
+                        elif [ -d .svn ]; then
+                                printf 'svn\n'
+                                _vcs_root=$(svn info --show-item=wc-root)
+                                printf '%s\n' "$_vcs_root"
+                                path=$(svn info --show-item=relative-url)
+                                case $path in
+                                        (*/branches/*)
+                                                printf '%s\n' "${${path#*/branches/}%%/*}"
+                                esac
+                                exit
+                        fi
+                        if [ / -ef . ] || [ . -ef .. ]; then
+                                exit
+                        fi
+                        \command cd -P ..
+                done
+        )
+        case "$type#$branch" in
+                (hg#default) _vcs_info='hg';;
+                (git#master) _vcs_info='git';;
+                (*#        ) _vcs_info="$type";;
+                (*         ) _vcs_info="$type@$branch";;
+        esac
+        
+        YASH_PS1R="\fc.${_vcs_info}" 
+}
+# update $_vcs_info on each prompt
+PROMPT_COMMAND=("$PROMPT_COMMAND" '_update_vcs_info')
+
+# these aliases choose a version controlling program for the current directory
+alias _vcs='${${_vcs_info:?not in a version-controlled directory}%%@*}'
+alias ci='_vcs commit'
+alias co='_vcs checkout'
+alias di='_vcs diff'
+alias log='_vcs log'
+alias st='_vcs status'
+alias up='_vcs update'
+
+# when a directory name is entered as a command, treat as "cd"
+_autocd()
+if [ -d "$1" ]; then
+        HANDLED=true
+        cd -- "$@"
+        break -i
+fi
+COMMAND_NOT_FOUND_HANDLER=("$COMMAND_NOT_FOUND_HANDLER" '_autocd "$@"')
+
+# treat command names starting with % as "fg"
+_autofg()
+if [ $# -eq 1 ]; then
+        case $1 in (%*)
+                HANDLED=true
+                fg "$1"
+                break -i
+        esac
+fi
+COMMAND_NOT_FOUND_HANDLER=("$COMMAND_NOT_FOUND_HANDLER" '_autofg "$@"')
+
+# print file type when executing non-executable files
+_file_type()
+if [ -e "$1" ] && ! [ -d "$1" ]; then
+        file -- "$1"
+fi
+COMMAND_NOT_FOUND_HANDLER=("$COMMAND_NOT_FOUND_HANDLER" '_file_type "$@"')
+
+bindkey --vi-insert  '\^L' clear-and-redraw-all
+bindkey --vi-command '\^L' clear-and-redraw-all
+
+# vim: set et sw=8 sts=8 tw=78 ft=sh:

@@ -5,12 +5,13 @@
 
 # paths
 PREFIX ?= /
-TOP     = $(shell pwd)
+TOP     = $(PWD)
 SRCDIR  = $(TOP)/sources
 EXTDIR  = $(TOP)/extracted
 
 # Optional configurations
 LAPTOP  ?= 0  # laptop mode enables certain keybinds and battery monitoring
+YASH    ?= 0  # install yash configuration
 SCRIPTS ?= 0  # whether or not to install the useful scripts (auto enable if laptop mode is enabled)
 VOL     ?= 0  # default volume step percent (default is 5 when at 0)
 BSD     ?= 0  # enables support for the BSDs (in config.mk and stuff)

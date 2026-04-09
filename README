@@ -13,7 +13,7 @@ Problem is that, running on a pure tty is tedious work, however since all my sys
 utilities before I get a GUI, it makes sense for me to create a "POSIX" makefile system to build all of it.
 However, this is intended to be easily "customizable", so users should be able to easily configure anything.
 
-This has been tested with pdpmake (though without --posix), it will work with any competent make build system on any Unix-y
+This has been tested with pdpmake (with --posix), it will work with any competent make build system on any Unix-y
 platform (NetBSD/OpenBSD/FreeBSD). Solaris support isn't planned, but it's trivial to get it working because the nature of
 suckless.
 
@@ -22,6 +22,7 @@ Building
 
 There are several options, however the defaults are very serviceable for any Linux distro on a desktop. Here are the options (these are parsed as ENV variables):
         - PREFIX  - install prefix (default is `/`)
+        - YASH    - install yash configuration
         - LAPTOP  - enables certain keybinds (media keys) and battery monitoring
         - SCRIPTS - installs optional scripts (auto-enabled if LAPTOP mode is enabled)
         - VOL     - default volume step (primarily for LAPTOP mode); if unset default is 5
@@ -31,10 +32,10 @@ There are several options, however the defaults are very serviceable for any Lin
         - FONT    - default font for dmenu/dwm; passed as a string (default: cozette:size=10)
         - ST_FONT - default font for st (terminal handles font weirdly) (default: cozette:size=12)
 
-Here is an example of a user using dotless for a laptop installing to a /usr/local prefix on OpenBSD:
+Here is an example of a user using dotless for a laptop installing to a /usr/local prefix on OpenBSD whist using yash shell:
 ```sh
-$ make PREFIX=/usr/local LAPTOP=1 BSD=1
-$ doas make PREFIX=/usr/local LAPTOP=1 BSD=1 install # yes, I prefer opendoas
+$ make PREFIX=/usr/local LAPTOP=1 BSD=1 YASH=1
+$ doas make PREFIX=/usr/local LAPTOP=1 BSD=1 YASH=1 install # yes, I prefer opendoas
 ```
 
 Patches
