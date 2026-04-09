@@ -20,7 +20,8 @@ suckless.
 Building
 --------
 
-There are several options, however the defaults are very serviceable for any Linux distro on a desktop. Here are the options (these are parsed as ENV variables):
+There are several options, however the defaults are very serviceable for any Linux distro on a desktop.
+Here are the options (these are parsed as ENV variables):
         - PREFIX  - install prefix (default is `/`)
         - YASH    - install yash configuration
         - LAPTOP  - enables certain keybinds (media keys) and battery monitoring
@@ -44,6 +45,6 @@ Patches
 Sending patches is trivial, the main site of development is on the [stagit repo](https://git.based.pt/dotless.git).
 This means that all patches aren't sent via PRs on any of the mirrors.
 
-Run a quick `git format-patch HEAD~1` and send to *cowmonk@based.pt* with the subject head of `[PATCH] dotless]`.
+Run a quick `git format-patch HEAD~1` and send to *cowmonk@based.pt* with the subject head of `[PATCH] dotless`.
 Consider reading the manpages of `git-send-email` if you are interested in moving towards email for development.
 
