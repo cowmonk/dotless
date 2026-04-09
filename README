@@ -10,13 +10,32 @@ For the longest time, I've been pulling each individual subsequent suckless util
 linux distros, most predominantly LFS now.
 
 Problem is that, running on a pure tty is tedious work, however since all my systems generally already have some basic
-utilities before I get a GUI, it makes sense for me to create a POSIX makefile system to build all of it.
+utilities before I get a GUI, it makes sense for me to create a "POSIX" makefile system to build all of it.
 However, this is intended to be easily "customizable", so users should be able to easily configure anything.
+
+This has been tested with pdpmake (though without --posix), it will work with any competent make build system on any Unix-y
+platform (NetBSD/OpenBSD/FreeBSD). Solaris support isn't planned, but it's trivial to get it working because the nature of
+suckless.
 
 Building
 --------
 
-There are several options, however the default is very serviceable for any Linux distro.
+There are several options, however the defaults are very serviceable for any Linux distro on a desktop. Here are the options (these are parsed as ENV variables):
+        - PREFIX  - install prefix (default is `/`)
+        - LAPTOP  - enables certain keybinds (media keys) and battery monitoring
+        - SCRIPTS - installs optional scripts (auto-enabled if LAPTOP mode is enabled)
+        - VOL     - default volume step (primarily for LAPTOP mode); if unset default is 5
+        - BSD     - enables "patches" to support BSD
+        - MIXER   - enables /dev/mixer support for volume monitoring, if not, it falls back to a hacky amixer script
+          (only on linux)
+        - FONT    - default font for dmenu/dwm; passed as a string (default: cozette:size=10)
+        - ST_FONT - default font for st (terminal handles font weirdly) (default: cozette:size=12)
+
+Here is an example of a user using dotless for a laptop installing to a /usr/local prefix on OpenBSD:
+```sh
+$ make PREFIX=/usr/local LAPTOP=1 BSD=1
+$ doas make PREFIX=/usr/local LAPTOP=1 BSD=1 install # yes, I prefer opendoas
+```
 
 Patches
 -------
