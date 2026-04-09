@@ -19,17 +19,14 @@ $(SRCDIR)/$(NAME_dwm).tar.gz:
 	@curl -fLo "${SRCDIR}/${NAME_dwm}.tar.gz"        "${URL_dwm}"
 
 $(SRCDIR)/$(NAME_st).tar.gz:
-	@[ -d "$(SRCDIR)" ] || mkdir -p "$(SRCDIR)"
 	@echo "pulling ${NAME_st}"
 	@curl -fLo "${SRCDIR}/${NAME_st}.tar.gz"         "${URL_st}"
 
 $(SRCDIR)/$(NAME_dmenu).tar.gz:
-	@[ -d "$(SRCDIR)" ] || mkdir -p "$(SRCDIR)"
 	@echo "pulling ${NAME_dmenu}"
 	@curl -fLo "${SRCDIR}/${NAME_dmenu}.tar.gz"      "${URL_dmenu}"
 
 $(SRCDIR)/$(NAME_slstatus).tar.gz:
-	@[ -d "$(SRCDIR)" ] || mkdir -p "$(SRCDIR)"
 	@echo "pulling ${NAME_slstatus}"
 	@curl -fLo "${SRCDIR}/${NAME_slstatus}.tar.gz"   "${URL_slstatus}"
 
@@ -53,15 +50,29 @@ $(EXTDIR)/$(NAME_slstatus): $(SRCDIR)/$(NAME_slstatus).tar.gz
 pull: $(SRCDIR)/$(NAME_dwm).tar.gz $(SRCDIR)/$(NAME_st).tar.gz $(SRCDIR)/$(NAME_dmenu).tar.gz $(SRCDIR)/$(NAME_slstatus).tar.gz
 	@printf "\033[1mpulled all sources!\n\033[0m"	
 
-extract: pull
+extract: pull $(EXTDIR)/$(NAME_dwm) $(EXTDIR)/$(NAME_st) $(EXTDIR)/$(NAME_dmenu) $(EXTDIR)/$(NAME_slstatus)
 	@printf "\033[1mextracted all sources!\n\033[0m"
 
 build: extract
+	@$(MAKE) -C $(EXTDIR)/$(NAME_dwm) CC="$(CC)"
+	@$(MAKE) -C $(EXTDIR)/$(NAME_st) CC="$(CC)"
+	@$(MAKE) -C $(EXTDIR)/$(NAME_dmenu) CC="$(CC)"
+	@$(MAKE) -C $(EXTDIR)/$(NAME_slstatus) CC="$(CC)"
 	
 install: build
+	@$(MAKE) -C $(EXTDIR)/$(NAME_dwm) CC="$(CC)" PREFIX="$(PREFIX)"
+	@$(MAKE) -C $(EXTDIR)/$(NAME_st) CC="$(CC)" PREFIX="$(PREFIX)"
+	@$(MAKE) -C $(EXTDIR)/$(NAME_dmenu) CC="$(CC)" PREFIX="$(PREFIX)"
+	@$(MAKE) -C $(EXTDIR)/$(NAME_slstatus) CC="$(CC)" PREFIX="$(PREFIX)"
 
-clean:
+clean: build
+	@$(MAKE) -C $(EXTDIR)/$(NAME_dwm) clean CC="$(CC)"
+	@$(MAKE) -C $(EXTDIR)/$(NAME_st) clean CC="$(CC)"
+	@$(MAKE) -C $(EXTDIR)/$(NAME_dmenu) clean CC="$(CC)"
+	@$(MAKE) -C $(EXTDIR)/$(NAME_slstatus) clean CC="$(CC)"
 
 distclean: clean
+	@echo "cleaning $(SRCDIR)"
 	@rm -r "$(SRCDIR)"
+	@echo "cleaning $(EXTDIR)"
 	@rm -r "$(EXTDIR)"

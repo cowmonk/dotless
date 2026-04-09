@@ -39,3 +39,8 @@ VER_slstatus  = 1.1
 NAME_slstatus = slstatus-$(VER_slstatus)
 URL_slstatus  = https://dl.suckless.org/tools/$(NAME_slstatus).tar.gz
 
+# make program
+MAKE = make
+
+# compiler
+CC = cc
