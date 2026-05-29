@@ -36,8 +36,10 @@ Here are the options (these are parsed as ENV variables):
 Here is an example of a user using dotless for a laptop installing to a /usr/local prefix on OpenBSD whist using yash shell:
 ```sh
 $ make PREFIX=/usr/local LAPTOP=1 BSD=1 YASH=1
-$ doas make PREFIX=/usr/local LAPTOP=1 BSD=1 YASH=1 install # yes, I prefer opendoas
+$ doas make PREFIX=/usr/local LAPTOP=1 BSD=1 YASH=1 USR=cowmonk install # yes, I prefer opendoas
 ```
+NOTE: if you want to install my particular yash profile, you need to specify a user to install the files to the correct home
+directory or it'll default to `$(whoami)` during install, which is likely the root user.
 
 Patches
 -------

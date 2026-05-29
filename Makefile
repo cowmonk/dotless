@@ -7,9 +7,8 @@
 .POSIX:
 SHELL = /bin/sh
 
-USRFILE  = .user
-USR      = $(shell tr -d '\n' < $(USRFILE) 2>/dev/null)
-HOME_DIR = $(shell awk -F: -v u="$(USR)" '$$1==u{print $$6}' /etc/passwd)
+USR     ?= $(whoami)
+HOME_DIR = /home/$(USR)/
 
 include config.mk
 
@@ -79,8 +78,8 @@ install: build
 		#install -d -m 0755 "$(HOME_DIR)/.config/yash"; \
 		#cp -av $(TOP)/files/config/yash/* $(HOME_DIR)/.config/yash/; \
 		#chown -R $(USR):$(USR) $(HOME_DIR)/.config/;
-		echo $(USR)
-		echo $(HOME_DIR)
+		echo $(USR); \
+		echo $(HOME_DIR); \
 	fi
 
 clean: build
