@@ -42,9 +42,28 @@ $ doas make PREFIX=/usr/local LAPTOP=1 BSD=1 YASH=1 install # yes, I prefer open
 Patches
 -------
 
-Sending patches is trivial, the main site of development is on the [stagit repo](https://git.based.pt/dotless.git).
+Sending patches is trivial, the main site of development is on the [stagit repo](https://based.pt/~cowmonk/git/dotless/log.html).
 This means that all patches aren't sent via PRs on any of the mirrors.
 
 Run a quick `git format-patch HEAD~1` and send to *cowmonk@based.pt* with the subject head of `[PATCH] dotless`.
 Consider reading the manpages of `git-send-email` if you are interested in moving towards email for development.
+
+I *strongly* suggest pgp encrypting your email, in which case my public keys can be found on `keys.openpgp.org`
+or here:
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+Comment: 52B0 852C 5A4C 823C FAB7  420A 2F73 9BCA BDD5 B880
+Comment: cowmonk@based.pt
+
+xjMEaSJi8xYJKwYBBAHaRw8BAQdAEVP64bLVXCxZYH5rItmtvThKyTrRZ4HFCZ42
+IqFx+crNEGNvd21vbmtAYmFzZWQucHTCiQQTFggAGgQLCQgHAhUIAhYBAhkABYJp
+ImLzAp4BApsDACEJEC9zm8q91biAFiEEUrCFLFpMgjz6t0IKL3Obyr3VuIBOEQEA
++gIa9t3yKL3FAHg5VT2xV8M2VdLf1ZqaFlCPyGhXBZsA+QGGstK6+YsUbmP+H6I5
+r4AgLawGeB9IH7WC0w4dhTsKzjgEaSJi8xIKKwYBBAGXVQEFAQEHQMsmen1ddl9a
+ddXu4ktm8BATTlEy2k4zMzo6RnyRB+d4AwEIB8J4BBgWCAAJBYJpImLzApsMACEJ
+EC9zm8q91biAFiEEUrCFLFpMgjz6t0IKL3Obyr3VuIA9AQD/S/EL51hMSBI35Lr3
+RjuNFtqnlgYpfkMxgPvp2bWRY60A/2NhDRNUjY2wA4+mESlCIf94FVvqcfclnSZU
+A7wM/YAB
+=nZZp
+-----END PGP PUBLIC KEY BLOCK-----
 

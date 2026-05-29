@@ -5,7 +5,11 @@
 #
 
 .POSIX:
-SHELL   = /bin/sh
+SHELL = /bin/sh
+
+USRFILE  = .user
+USR      = $(shell tr -d '\n' < $(USRFILE) 2>/dev/null)
+HOME_DIR = $(shell awk -F: -v u="$(USR)" '$$1==u{print $$6}' /etc/passwd)
 
 include config.mk
 
@@ -53,26 +57,42 @@ pull: $(SRCDIR)/$(NAME_dwm).tar.gz $(SRCDIR)/$(NAME_st).tar.gz $(SRCDIR)/$(NAME_
 extract: pull $(EXTDIR)/$(NAME_dwm) $(EXTDIR)/$(NAME_st) $(EXTDIR)/$(NAME_dmenu) $(EXTDIR)/$(NAME_slstatus)
 	@printf "\033[1mextracted all sources!\n\033[0m"
 
-build: extract
-	@$(MAKE) -C $(EXTDIR)/$(NAME_dwm) CC="$(CC)"
-	@$(MAKE) -C $(EXTDIR)/$(NAME_st) CC="$(CC)"
-	@$(MAKE) -C $(EXTDIR)/$(NAME_dmenu) CC="$(CC)"
-	@$(MAKE) -C $(EXTDIR)/$(NAME_slstatus) CC="$(CC)"
+.user:
+	@sh -c "echo $(whoami) > .user"
+
+build: extract .user
+	@if [ ${NOUSR} -eq 1 ] && [ ${BSD} -eq 0 ]; then \
+		find $(EXTDIR) -name config.mk -exec sed -i 's|/usr/|/|g' {} +; \
+	elif []
+	fi
+	@(cd $(EXTDIR)/$(NAME_dwm)      && CC="$(CC)" $(MAKE))
+	@(cd $(EXTDIR)/$(NAME_st)       && CC="$(CC)" $(MAKE))
+	@(cd $(EXTDIR)/$(NAME_dmenu)    && CC="$(CC)" $(MAKE))
+	@(cd $(EXTDIR)/$(NAME_slstatus) && CC="$(CC)" $(MAKE))
 	
 install: build
-	@$(MAKE) -C $(EXTDIR)/$(NAME_dwm) CC="$(CC)" PREFIX="$(PREFIX)"
-	@$(MAKE) -C $(EXTDIR)/$(NAME_st) CC="$(CC)" PREFIX="$(PREFIX)"
-	@$(MAKE) -C $(EXTDIR)/$(NAME_dmenu) CC="$(CC)" PREFIX="$(PREFIX)"
-	@$(MAKE) -C $(EXTDIR)/$(NAME_slstatus) CC="$(CC)" PREFIX="$(PREFIX)"
+	#@(cd $(EXTDIR)/$(NAME_dwm)      && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
+	#@(cd $(EXTDIR)/$(NAME_st)       && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
+	#@(cd $(EXTDIR)/$(NAME_dmenu)    && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
+	#@(cd $(EXTDIR)/$(NAME_slstatus) && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
+	@if [ ${YASH} -eq 1 ]; then \
+		#install -d -m 0755 "$(HOME_DIR)/.config/yash"; \
+		#cp -av $(TOP)/files/config/yash/* $(HOME_DIR)/.config/yash/; \
+		#chown -R $(USR):$(USR) $(HOME_DIR)/.config/;
+		echo $(USR)
+		echo $(HOME_DIR)
+	fi
 
 clean: build
-	@$(MAKE) -C $(EXTDIR)/$(NAME_dwm) clean CC="$(CC)"
-	@$(MAKE) -C $(EXTDIR)/$(NAME_st) clean CC="$(CC)"
-	@$(MAKE) -C $(EXTDIR)/$(NAME_dmenu) clean CC="$(CC)"
-	@$(MAKE) -C $(EXTDIR)/$(NAME_slstatus) clean CC="$(CC)"
+	@(cd $(EXTDIR)/$(NAME_dwm)      && CC="$(CC)" $(MAKE) clean)
+	@(cd $(EXTDIR)/$(NAME_st)       && CC="$(CC)" $(MAKE) clean)
+	@(cd $(EXTDIR)/$(NAME_dmenu)    && CC="$(CC)" $(MAKE) clean)
+	@(cd $(EXTDIR)/$(NAME_slstatus) && CC="$(CC)" $(MAKE) clean)
 
 distclean: clean
 	@echo "cleaning $(SRCDIR)"
 	@rm -r "$(SRCDIR)"
 	@echo "cleaning $(EXTDIR)"
 	@rm -r "$(EXTDIR)"
+	@echo "removing .user"
+	@rm .user
