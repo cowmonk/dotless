@@ -55,7 +55,7 @@ OpenBSD doesn't need these scripts, and the resulting config.h shouldn't have th
 Contributing
 ------------
 
-This project has been migrated from the old stagit repo to github because my VPS was taken down. The patches section is kept
+This project has been migrated from the old stagit repo to github because my git.based.pt no longer exists. The patches section is kept
 for archival reasons but also because getting my own git-server is one of the plans and this will serve as a mirror eventually.
 
 For now, you can submit PRs over github. The section below is for your own viewing pleasure.
