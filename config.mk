@@ -19,6 +19,9 @@ MIXER   ?= 0  # /dev/mixer support, if not then it falls back to amixer hacky sc
 FONT    ?= "" # set the global font for dmenu, and dwm (default: cozette:size=10)
 ST_FONT ?= "" # set the font for st (default: cozette:size=12).
 
+# very very optional configuration
+NOUSR ?= 0 # specifically for my suckless systems where I do not have a /usr
+
 # dwm
 VER_dwm  = 6.8
 NAME_dwm = dwm-$(VER_dwm)

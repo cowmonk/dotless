@@ -1,0 +1,11 @@
+--- config.mk.orig	Fri Apr 10 02:15:46 2026
++++ config.mk	Fri Apr 10 02:16:21 2026
+@@ -16,7 +16,7 @@ CFLAGS   = -std=c99 -pedantic -Wall -Wextra -Wno-unuse
+ LDFLAGS  = -L$(X11LIB) -s
+ # OpenBSD: add -lsndio
+ # FreeBSD: add -lkvm -lsndio
+-LDLIBS   = -lX11
++LDLIBS   = -lX11 -lsndio
+ 
+ # compiler and linker
+ CC = cc

@@ -1,0 +1,13 @@
+--- config.mk.orig	Fri Apr 10 02:14:59 2026
++++ config.mk	Fri Apr 10 02:14:35 2026
+@@ -18,8 +18,8 @@ XINERAMAFLAGS = -DXINERAMA
+ FREETYPELIBS = -lfontconfig -lXft
+ FREETYPEINC = /usr/include/freetype2
+ # OpenBSD (uncomment)
+-FREETYPEINC = ${X11INC}/freetype2
+-MANPREFIX = ${PREFIX}/man
++#FREETYPEINC = ${X11INC}/freetype2
++#MANPREFIX = ${PREFIX}/man
+ 
+ # includes and libs
+ INCS = -I${X11INC} -I${FREETYPEINC}

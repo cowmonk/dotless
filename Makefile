@@ -70,14 +70,14 @@ build: extract .user
 	@(cd $(EXTDIR)/$(NAME_slstatus) && CC="$(CC)" $(MAKE))
 	
 install: build
-	#@(cd $(EXTDIR)/$(NAME_dwm)      && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
-	#@(cd $(EXTDIR)/$(NAME_st)       && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
-	#@(cd $(EXTDIR)/$(NAME_dmenu)    && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
-	#@(cd $(EXTDIR)/$(NAME_slstatus) && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
+	@(cd $(EXTDIR)/$(NAME_dwm)      && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
+	@(cd $(EXTDIR)/$(NAME_st)       && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
+	@(cd $(EXTDIR)/$(NAME_dmenu)    && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
+	@(cd $(EXTDIR)/$(NAME_slstatus) && CC="$(CC)" PREFIX="$(PREFIX)" $(MAKE) install)
 	@if [ ${YASH} -eq 1 ]; then \
-		#install -d -m 0755 "$(HOME_DIR)/.config/yash"; \
-		#cp -av $(TOP)/files/config/yash/* $(HOME_DIR)/.config/yash/; \
-		#chown -R $(USR):$(USR) $(HOME_DIR)/.config/;
+		install -d -m 0755 "$(HOME_DIR)/.config/yash"; \
+		cp -av $(TOP)/files/config/yash/* $(HOME_DIR)/.config/yash/; \
+		chown -R $(USR):$(USR) $(HOME_DIR)/.config/; \
 		echo $(USR); \
 		echo $(HOME_DIR); \
 	fi
