@@ -7,29 +7,29 @@ Rationale
 ---------
 
 For the longest time, I've been pulling each individual subsequent suckless utility for a semi-complete system on a multitude of
-linux distros, most predominantly LFS now.
+linux distros, most predominantly a my own custom distro now.
 
 Problem is that, running on a pure tty is tedious work, however since all my systems generally already have some basic
 utilities before I get a GUI, it makes sense for me to create a "POSIX" makefile system to build all of it.
-However, this is intended to be easily "customizable", so users should be able to easily configure anything.
+However, this is intended to be easily "customizable", so it should be relatively simple to adapt this to any UNIX-like system.
 
-This has been tested with pdpmake (with --posix), it will work with any competent make build system on any Unix-y
+This has been tested with pdpmake (with --posix), it will work with any competent make build system on any UNIX-like
 platform (NetBSD/OpenBSD/FreeBSD). Solaris support isn't planned, but it's trivial to get it working because the nature of
 suckless.
 
 Building
 --------
 
-There are several options, however the defaults are very serviceable for any Linux distro on a desktop.
+There are several options, however the defaults are very serviceable for any Linux distro.
 Here are the options (these are parsed as ENV variables):
         - PREFIX  - install prefix (default is `/`)
         - YASH    - install yash configuration
         - LAPTOP  - enables certain keybinds (media keys) and battery monitoring
         - SCRIPTS - installs optional scripts (auto-enabled if LAPTOP mode is enabled)
         - VOL     - default volume step (primarily for LAPTOP mode); if unset default is 5
-        - BSD     - enables "patches" to support BSD
+        - BSD     - enables "patches" to support (Open)BSD
         - MIXER   - enables /dev/mixer support for volume monitoring, if not, it falls back to a hacky amixer script
-          (only on linux)
+                    (only on linux)
         - FONT    - default font for dmenu/dwm; passed as a string (default: cozette:size=10)
         - ST_FONT - default font for st (terminal handles font weirdly) (default: cozette:size=12)
 
@@ -41,7 +41,27 @@ $ doas make PREFIX=/usr/local LAPTOP=1 BSD=1 YASH=1 USR=cowmonk install # yes, I
 NOTE: if you want to install my particular yash profile, you need to specify a user to install the files to the correct home
 directory or it'll default to `$(whoami)` during install, which is likely the root user.
 
-Patches
+SCRIPTS
+-------
+
+There are only two scripts that are included within the project, both of which are entirely linux exclusive.
+
+    backlight.sh      - useful script that writes to /sys/class/backlight/*
+                        NOTE: only good for single monitor setups
+    volume.sh         - useful script that is just a glorified amixer wrapper.
+
+OpenBSD doesn't need these scripts, and the resulting config.h shouldn't have these.
+
+Contributing
+------------
+
+This project has been migrated from the old stagit repo to github because my VPS was taken down. The patches section is kept
+for archival reasons but also because getting my own git-server is one of the plans and this will serve as a mirror eventually.
+
+For now, you can submit PRs over github. The section below is for your own viewing pleasure.
+
+
+Patches (OBSOLETE)
 -------
 
 Sending patches is trivial, the main site of development is on the [stagit repo](https://based.pt/~cowmonk/git/dotless/log.html).
