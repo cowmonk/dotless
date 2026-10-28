@@ -52,19 +52,10 @@ There are only two scripts that are included within the project, both of which a
 
 OpenBSD doesn't need these scripts, and the resulting config.h shouldn't have these.
 
-Contributing
-------------
-
-This project has been migrated from the old stagit repo to github because my git.based.pt no longer exists. The patches section is kept
-for archival reasons but also because getting my own git-server is one of the plans and this will serve as a mirror eventually.
-
-For now, you can submit PRs over github. The section below is for your own viewing pleasure.
-
-
-Patches (OBSOLETE)
+Patches
 -------
 
-Sending patches is trivial, the main site of development is on the [stagit repo](https://based.pt/~cowmonk/git/dotless/log.html).
+Sending patches is trivial, the main site of development is on the [stagit repo](https://git.daat.foo/dotless/log.html).
 This means that all patches aren't sent via PRs on any of the mirrors.
 
 Run a quick `git format-patch HEAD~1` and send to *cowmonk@based.pt* with the subject head of `[PATCH] dotless`.
