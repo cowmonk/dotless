@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 #ifndef ST_FONT
-        #define FONT "Cozette:size=12"
+        #define ST_FONT "cozette:size=12"
 #endif
 
 /*
@@ -8,7 +8,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = FONT;
+static char *font = ST_FONT;
 static int borderpx = 2;
 
 /*

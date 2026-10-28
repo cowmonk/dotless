@@ -1,10 +1,10 @@
 /* See LICENSE file for copyright and license details. */
 #ifndef FONT
-        #define FONT "Cozette-10:size=10"
+        #define FONT "cozette:size=10"
 #endif
 #ifdef LAPTOP
-        #define XK_Mute  0x008ff12
-        #define XK_AUp   0x100ff13
+        #define XK_Mute  0x1008ff12
+        #define XK_AUp   0x1008ff13
         #define XK_ADown 0x1008ff11
 #endif
 
@@ -71,11 +71,21 @@ static const char *termcmd[]  = { "st", NULL };
 
 #ifdef LAPTOP
 #ifndef VOL
-        #define VOL 5
+#ifdef OBSD
+        #define VOL "0.05"
+#else
+        #define VOL "5"
 #endif
+#endif
+#ifdef OBSD
+static const char *voltog[]   = { "sndioctl", "output.mute=!", NULL };
+static const char *volup[]    = { "sndioctl", "output.level=+" VOL, NULL };
+static const char *voldown[]  = { "sndioctl", "output.level=-" VOL, NULL };
+#else
 static const char *voltog[]   = { "volume.sh", "tog", NULL };
 static const char *volup[]    = { "volume.sh", "up", VOL, NULL};
 static const char *voldown[]  = { "volume.sh", "down", VOL, NULL };
+#endif
 #endif
 
 static const Key keys[] = {

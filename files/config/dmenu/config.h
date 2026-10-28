@@ -2,7 +2,7 @@
 /* Default settings; can be overriden by command line. */
 
 #ifndef FONT
-        #define FONT "Cozette-10:size=10"
+        #define FONT "cozette:size=10"
 #endif
 
 static int topbar = 0;                      /* -b  option; if 0, dmenu appears at bottom     */

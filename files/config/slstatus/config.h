@@ -70,7 +70,7 @@ static const struct arg args[] = {
         { vol_perc,     "[VOL %s%%] ", NULL },
 #else
 #ifdef MIXER
-        { vol_perc,     "[VOL %s%%] ", "/dev/mixer" }
+        { vol_perc,     "[VOL %s%%] ", "/dev/mixer" },
 #else
         { run_command,  "[VOL %s] ",   "amixer get Master | awk -F\"[][]\" '/%/ {print $2}' | head -n1" },
 #endif
@@ -81,7 +81,7 @@ static const struct arg args[] = {
 #ifdef OBSD
         { battery_perc, "[BAT %s%%] ",  NULL },
 #else
-        { batter_perc,  "[BAT %s%%] ",  "BAT0" },
+        { battery_perc, "[BAT %s%%] ",  "BAT0" },
 #endif
 #endif
         { datetime,     "%s",           "%a %b %d %R:%S" },
